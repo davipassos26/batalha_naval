@@ -1,0 +1,160 @@
+/*
+    Super Trunfo – Nível Aventureiro
+    Comparação interativa entre duas cartas de países.
+
+    Autor: Seu Nome
+    Linguagem: C
+
+    O programa cria duas cartas pré-cadastradas (como no desafio anterior)
+    e permite que o usuário selecione um atributo para comparar.
+
+    Atributos:
+      - Nome do país (string) [apenas exibido]
+      - População (int)
+      - Área (float)
+      - PIB (float)
+      - Pontos turísticos (int)
+      - Densidade demográfica (float)
+*/
+
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    // -------------------------
+    // Cartas pré-cadastradas
+    // -------------------------
+    
+    char pais1_nome[] = "Brasil";
+    int pais1_populacao = 203000000;
+    float pais1_area = 8516000.0;
+    float pais1_pib = 2.1;
+    int pais1_pontos = 10;
+    float pais1_densidade = pais1_populacao / pais1_area;
+
+    char pais2_nome[] = "Japao";
+    int pais2_populacao = 125000000;
+    float pais2_area = 377975.0;
+    float pais2_pib = 4.9;
+    int pais2_pontos = 12;
+    float pais2_densidade = pais2_populacao / pais2_area;
+
+    // -------------------------
+    // Menu interativo
+    // -------------------------
+
+    int opcao;
+
+    printf("===== SUPER TRUNFO - NÍVEL AVENTUREIRO =====\n");
+    printf("Comparar qual atributo?\n");
+    printf("1 - População\n");
+    printf("2 - Área\n");
+    printf("3 - PIB\n");
+    printf("4 - Pontos Turísticos\n");
+    printf("5 - Densidade Demográfica (menor vence)\n");
+    printf("Opcao: ");
+    scanf("%d", &opcao);
+
+    printf("\nVocê escolheu comparar: ");
+
+    // Para armazenar valores comparados
+    float valor1 = 0, valor2 = 0;
+
+    // -------------------------
+    // Estrutura switch (menu)
+    // -------------------------
+    switch (opcao) {
+        case 1:
+            printf("População\n");
+            valor1 = pais1_populacao;
+            valor2 = pais2_populacao;
+
+            printf("\n%s: %.0f habitantes", pais1_nome, valor1);
+            printf("\n%s: %.0f habitantes\n", pais2_nome, valor2);
+
+            // if-else aninhado
+            if (valor1 > valor2) {
+                printf("\nVencedor: %s\n", pais1_nome);
+            } else if (valor2 > valor1) {
+                printf("\nVencedor: %s\n", pais2_nome);
+            } else {
+                printf("\nEmpate!\n");
+            }
+            break;
+
+        case 2:
+            printf("Área\n");
+            valor1 = pais1_area;
+            valor2 = pais2_area;
+
+            printf("\n%s: %.2f km²", pais1_nome, valor1);
+            printf("\n%s: %.2f km²\n", pais2_nome, valor2);
+
+            if (valor1 > valor2) {
+                printf("\nVencedor: %s\n", pais1_nome);
+            } else if (valor2 > valor1) {
+                printf("\nVencedor: %s\n", pais2_nome);
+            } else {
+                printf("\nEmpate!\n");
+            }
+            break;
+
+        case 3:
+            printf("PIB\n");
+            valor1 = pais1_pib;
+            valor2 = pais2_pib;
+
+            printf("\n%s: %.2f trilhões", pais1_nome, valor1);
+            printf("\n%s: %.2f trilhões\n", pais2_nome, valor2);
+
+            if (valor1 > valor2) {
+                printf("\nVencedor: %s\n", pais1_nome);
+            } else if (valor2 > valor1) {
+                printf("\nVencedor: %s\n", pais2_nome);
+            } else {
+                printf("\nEmpate!\n");
+            }
+            break;
+
+        case 4:
+            printf("Pontos Turísticos\n");
+            valor1 = pais1_pontos;
+            valor2 = pais2_pontos;
+
+            printf("\n%s: %.0f pontos turísticos", pais1_nome, valor1);
+            printf("\n%s: %.0f pontos turísticos\n", pais2_nome, valor2);
+
+            if (valor1 > valor2) {
+                printf("\nVencedor: %s\n", pais1_nome);
+            } else if (valor2 > valor1) {
+                printf("\nVencedor: %s\n", pais2_nome);
+            } else {
+                printf("\nEmpate!\n");
+            }
+            break;
+
+        case 5:
+            printf("Densidade Demográfica (menor vence)\n");
+            valor1 = pais1_densidade;
+            valor2 = pais2_densidade;
+
+            printf("\n%s: %.4f hab/km²", pais1_nome, valor1);
+            printf("\n%s: %.4f hab/km²\n", pais2_nome, valor2);
+
+            // Regra invertida + if aninhado
+            if (valor1 < valor2) {
+                printf("\nVencedor: %s (menor densidade)\n", pais1_nome);
+            } else if (valor2 < valor1) {
+                printf("\nVencedor: %s (menor densidade)\n", pais2_nome);
+            } else {
+                printf("\nEmpate!\n");
+            }
+            break;
+
+        default:
+            printf("\nOpção inválida! Escolha entre 1 e 5.\n");
+            break;
+    }
+
+    return 0;
+}
