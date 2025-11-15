@@ -1,0 +1,170 @@
+/*
+    SUPER TRUNFO – NÍVEL MESTRE
+    Comparação avançada com múltiplos atributos
+
+    Autor: Seu Nome
+    Linguagem: C
+
+    Funcionalidades:
+      ✔ Escolha de dois atributos numéricos diferentes
+      ✔ Menus dinâmicos com switch
+      ✔ Operador ternário na comparação
+      ✔ Regra especial para densidade (menor vence)
+      ✔ Soma dos atributos para decidir o vencedor final
+      ✔ Tratamento de empates e entradas inválidas
+*/
+
+#include <stdio.h>
+
+int main() {
+
+    // -------------------------------
+    // CARTAS PRÉ-CADASTRADAS
+    // -------------------------------
+
+    char pais1_nome[] = "Brasil";
+    int   pais1_populacao = 203000000;
+    float pais1_area = 8516000.0;
+    float pais1_pib = 2.1;
+    int   pais1_pontos = 10;
+    float pais1_densidade = pais1_populacao / pais1_area;
+
+    char pais2_nome[] = "Japao";
+    int   pais2_populacao = 125000000;
+    float pais2_area = 377975.0;
+    float pais2_pib = 4.9;
+    int   pais2_pontos = 12;
+    float pais2_densidade = pais2_populacao / pais2_area;
+
+    int attr1 = 0, attr2 = 0;
+    float valor1_c1 = 0, valor1_c2 = 0;
+    float valor2_c1 = 0, valor2_c2 = 0;
+
+    float soma1 = 0, soma2 = 0;
+    
+    // -------------------------------
+    // MENU 1 – Escolha do primeiro atributo
+    // -------------------------------
+
+    printf("======== SUPER TRUNFO – NIVEL MESTRE ========\n");
+    printf("\nEscolha o PRIMEIRO atributo para comparar:\n");
+    printf("1 - População\n");
+    printf("2 - Área\n");
+    printf("3 - PIB\n");
+    printf("4 - Pontos Turísticos\n");
+    printf("5 - Densidade Demográfica (menor vence)\n");
+    printf("Opção: ");
+    scanf("%d", &attr1);
+
+    if (attr1 < 1 || attr1 > 5) {
+        printf("\nOpção inválida!\n");
+        return 0;
+    }
+
+    // -------------------------------
+    // MENU 2 – Dinâmico (remove attr1)
+    // -------------------------------
+
+    printf("\nAgora escolha o SEGUNDO atributo (diferente do primeiro):\n");
+
+    for (int i = 1; i <= 5; i++) {
+        if (i == attr1) continue;
+
+        switch (i) {
+            case 1: printf("1 - População\n"); break;
+            case 2: printf("2 - Área\n"); break;
+            case 3: printf("3 - PIB\n"); break;
+            case 4: printf("4 - Pontos Turísticos\n"); break;
+            case 5: printf("5 - Densidade Demográfica (menor vence)\n"); break;
+        }
+    }
+
+    printf("Opção: ");
+    scanf("%d", &attr2);
+
+    if (attr2 < 1 || attr2 > 5 || attr2 == attr1) {
+        printf("\nOpção inválida!\n");
+        return 0;
+    }
+
+    // -------------------------------
+    // FUNÇÃO AUXILIAR (switch carregando valores)
+    // -------------------------------
+
+    // Carrega valores do PRIMEIRO atributo
+    switch (attr1) {
+        case 1: valor1_c1 = pais1_populacao; valor1_c2 = pais2_populacao; break;
+        case 2: valor1_c1 = pais1_area;       valor1_c2 = pais2_area;     break;
+        case 3: valor1_c1 = pais1_pib;        valor1_c2 = pais2_pib;      break;
+        case 4: valor1_c1 = pais1_pontos;     valor1_c2 = pais2_pontos;   break;
+        case 5: valor1_c1 = pais1_densidade;  valor1_c2 = pais2_densidade;break;
+    }
+
+    // Carrega valores do SEGUNDO atributo
+    switch (attr2) {
+        case 1: valor2_c1 = pais1_populacao; valor2_c2 = pais2_populacao; break;
+        case 2: valor2_c1 = pais1_area;       valor2_c2 = pais2_area;     break;
+        case 3: valor2_c1 = pais1_pib;        valor2_c2 = pais2_pib;      break;
+        case 4: valor2_c1 = pais1_pontos;     valor2_c2 = pais2_pontos;   break;
+        case 5: valor2_c1 = pais1_densidade;  valor2_c2 = pais2_densidade;break;
+    }
+
+    // -------------------------------
+    // CÁLCULO DA SOMA
+    // (densidade continua invertida, mas soma é normal)
+    // -------------------------------
+
+    soma1 = valor1_c1 + valor2_c1;
+    soma2 = valor1_c2 + valor2_c2;
+
+    // -------------------------------
+    // EXIBINDO RESULTADOS
+    // -------------------------------
+
+    printf("\n===== RESULTADO =====\n");
+    printf("País 1: %s\n", pais1_nome);
+    printf("País 2: %s\n\n", pais2_nome);
+
+    char *nomeAtributo;
+
+    // Exibe nome do atributo 1
+    switch (attr1) {
+        case 1: nomeAtributo = "População"; break;
+        case 2: nomeAtributo = "Área"; break;
+        case 3: nomeAtributo = "PIB"; break;
+        case 4: nomeAtributo = "Pontos Turísticos"; break;
+        case 5: nomeAtributo = "Densidade Demográfica"; break;
+    }
+    printf("Atributo 1: %s\n", nomeAtributo);
+    printf("  %s: %.4f\n", pais1_nome, valor1_c1);
+    printf("  %s: %.4f\n\n", pais2_nome, valor1_c2);
+
+    // Exibe nome do atributo 2
+    switch (attr2) {
+        case 1: nomeAtributo = "População"; break;
+        case 2: nomeAtributo = "Área"; break;
+        case 3: nomeAtributo = "PIB"; break;
+        case 4: nomeAtributo = "Pontos Turísticos"; break;
+        case 5: nomeAtributo = "Densidade Demográfica"; break;
+    }
+    printf("Atributo 2: %s\n", nomeAtributo);
+    printf("  %s: %.4f\n", pais1_nome, valor2_c1);
+    printf("  %s: %.4f\n\n", pais2_nome, valor2_c2);
+
+    printf("SOMA FINAL DOS ATRIBUTOS:\n");
+    printf("  %s: %.4f\n", pais1_nome, soma1);
+    printf("  %s: %.4f\n", pais2_nome, soma2);
+
+    // -------------------------------
+    // VENCEDOR FINAL
+    // usando operador ternário
+    // -------------------------------
+
+    printf("\nResultado Final: ");
+
+    (soma1 > soma2) ? printf("Vencedor: %s\n", pais1_nome) :
+    (soma2 > soma1) ? printf("Vencedor: %s\n", pais2_nome) :
+                      printf("Empate!\n");
+
+    return 0;
+}
