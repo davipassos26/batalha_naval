@@ -1,0 +1,303 @@
+/*
+  Batalha Naval - Nível Novato
+  - Tabuleiro fixo 10x10
+  - Dois navios de tamanho 3
+    * navio_horizontal: orientado horizontalmente
+    * navio_vertical:   orientado verticalmente
+  - Valores no tabuleiro:
+    0 -> água
+    3 -> parte do navio
+  - Coordenadas definidas diretamente no código (0-based)
+  - Valida: dentro dos limites e sem sobreposição
+*/
+
+#include <stdio.h>
+#include <stdbool.h>
+
+#define BOARD_SIZE 10
+#define SHIP_SIZE 3
+
+/* Inicializa todos os elementos do tabuleiro com 0 (água) */
+void initBoard(int board[BOARD_SIZE][BOARD_SIZE]) {
+    for (int r = 0; r < BOARD_SIZE; r++)
+        for (int c = 0; c < BOARD_SIZE; c++)
+            board[r][c] = 0;
+}
+
+/* Imprime o tabuleiro de forma organizada */
+void printBoard(int board[BOARD_SIZE][BOARD_SIZE]) {
+    printf("   "); /* cabeçalho de colunas */
+    for (int c = 0; c < BOARD_SIZE; c++)
+        printf("%2d ", c);
+    printf("\n");
+
+    for (int r = 0; r < BOARD_SIZE; r++) {
+        printf("%2d ", r); /* índice de linha */
+        for (int c = 0; c < BOARD_SIZE; c++) {
+            printf(" %d ", board[r][c]);
+        }
+        printf("\n");
+    }
+}
+
+/* Verifica se um navio horizontal cabe no tabuleiro a partir de (row, col) */
+bool fitsHorizontal(int row, int col) {
+    if (row < 0 || row >= BOARD_SIZE) return false;
+    if (col < 0 || (col + SHIP_SIZE - 1) >= BOARD_SIZE) return false;
+    return true;
+}
+
+/* Verifica se um navio vertical cabe no tabuleiro a partir de (row, col) */
+bool fitsVertical(int row, int col) {
+    if (col < 0 || col >= BOARD_SIZE) return false;
+    if (row < 0 || (row + SHIP_SIZE - 1) >= BOARD_SIZE) return false;
+    return true;
+}
+
+/* Verifica sobreposição para um navio horizontal */
+bool overlapHorizontal(int board[BOARD_SIZE][BOARD_SIZE], int row, int col) {
+    for (int i = 0; i < SHIP_SIZE; i++) {
+        if (board[row][col + i] != 0) return true;
+    }
+    return false;
+}
+
+/* Verifica sobreposição para um navio vertical */
+bool overlapVertical(int board[BOARD_SIZE][BOARD_SIZE], int row, int col) {
+    for (int i = 0; i < SHIP_SIZE; i++) {
+        if (board[row + i][col] != 0) return true;
+    }
+    return false;
+}
+
+/* Coloca um navio horizontal no tabuleiro (marca com 3) */
+void placeHorizontal(int board[BOARD_SIZE][BOARD_SIZE], int row, int col) {
+    for (int i = 0; i < SHIP_SIZE; i++)
+        board[row][col + i] = 3;
+}
+
+/* Coloca um navio vertical no tabuleiro (marca com 3) */
+void placeVertical(int board[BOARD_SIZE][BOARD_SIZE], int row, int col) {
+    for (int i = 0; i < SHIP_SIZE; i++)
+        board[row + i][col] = 3;
+}
+
+int main() {
+    int board[BOARD_SIZE][BOARD_SIZE];
+
+    /* Inicializa o tabuleiro (todas posições = 0) */
+    initBoard(board);
+
+    /* 
+       Defina as coordenadas iniciais aqui (0-based):
+       - linha e coluna onde começa o navio (parte "mais à esquerda" para horizontal,
+         e "mais acima" para vertical).
+       Exemplos:
+         horizontal_start_row = 2;
+         horizontal_start_col = 4;
+         vertical_start_row = 5;
+         vertical_start_col = 7;
+    */
+    int horizontal_start_row = 2;
+    int horizontal_start_col = 4;
+
+    int vertical_start_row = 5;
+    int vertical_start_col = 7;
+
+    /* Validação: cabe no tabuleiro? */
+    if (!fitsHorizontal(horizontal_start_row, horizontal_start_col)) {
+        printf("Erro: navio horizontal não cabe nas coordenadas (%d, %d).\n",
+               horizontal_start_row, horizontal_start_col);
+        return 1;
+    }
+    if (!fitsVertical(vertical_start_row, vertical_start_col)) {
+        printf("Erro: navio vertical não cabe nas coordenadas (%d, %d).\n",
+               vertical_start_row, vertical_start_col);
+        return 1;
+    }
+
+    /* Verifica sobreposição entre os dois navios */
+    bool overlap = false;
+
+    /* Primeiro cheque sobreposição destas posições cruzadas (simplificação): */
+    /* Checamos se qualquer célula que o navio horizontal ocupar já está ocupada,
+       e idem para o vertical. Como o tabuleiro está inicialmente vazio, é suficiente
+       checar antes de colocar cada navio. */
+
+    if (overlapHorizontal(board, horizontal_start_row, horizontal_start_col)) {
+        printf("Erro: sobreposição detectada ao tentar posicionar navio horizontal.\n");
+        return 1;
+    }
+    /* Coloca navio horizontal temporariamente */
+    placeHorizontal(board, horizontal_start_row, horizontal_start_col);
+
+    /* Agora verifique se o navio vertical colide com o que acabamos de colocar */
+    if (overlapVertical(board, vertical_start_row, vertical_start_col)) {
+        overlap = true;
+    }
+
+    if (overlap) {
+        printf("Erro: navios iriam se sobrepor (posicione em outras coordenadas).\n");
+        return 1;
+    }
+
+    /* Se não houve sobreposição, colocamos o navio vertical (já que o horizontal foi colocado) */
+    placeVertical(board, vertical_start_row, vertical_start_col);
+
+    /* Exibe o tabuleiro final */
+    printf("Tabuleiro com navios posicionados (0 = água, 3 = navio):\n\n");
+    printBoard(board);
+
+    return 0;
+}/*
+  Batalha Naval - Nível Novato
+  - Tabuleiro fixo 10x10
+  - Dois navios de tamanho 3
+    * navio_horizontal: orientado horizontalmente
+    * navio_vertical:   orientado verticalmente
+  - Valores no tabuleiro:
+    0 -> água
+    3 -> parte do navio
+  - Coordenadas definidas diretamente no código (0-based)
+  - Valida: dentro dos limites e sem sobreposição
+*/
+
+#include <stdio.h>
+#include <stdbool.h>
+
+#define BOARD_SIZE 10
+#define SHIP_SIZE 3
+
+/* Inicializa todos os elementos do tabuleiro com 0 (água) */
+void initBoard(int board[BOARD_SIZE][BOARD_SIZE]) {
+    for (int r = 0; r < BOARD_SIZE; r++)
+        for (int c = 0; c < BOARD_SIZE; c++)
+            board[r][c] = 0;
+}
+
+/* Imprime o tabuleiro de forma organizada */
+void printBoard(int board[BOARD_SIZE][BOARD_SIZE]) {
+    printf("   "); /* cabeçalho de colunas */
+    for (int c = 0; c < BOARD_SIZE; c++)
+        printf("%2d ", c);
+    printf("\n");
+
+    for (int r = 0; r < BOARD_SIZE; r++) {
+        printf("%2d ", r); /* índice de linha */
+        for (int c = 0; c < BOARD_SIZE; c++) {
+            printf(" %d ", board[r][c]);
+        }
+        printf("\n");
+    }
+}
+
+/* Verifica se um navio horizontal cabe no tabuleiro a partir de (row, col) */
+bool fitsHorizontal(int row, int col) {
+    if (row < 0 || row >= BOARD_SIZE) return false;
+    if (col < 0 || (col + SHIP_SIZE - 1) >= BOARD_SIZE) return false;
+    return true;
+}
+
+/* Verifica se um navio vertical cabe no tabuleiro a partir de (row, col) */
+bool fitsVertical(int row, int col) {
+    if (col < 0 || col >= BOARD_SIZE) return false;
+    if (row < 0 || (row + SHIP_SIZE - 1) >= BOARD_SIZE) return false;
+    return true;
+}
+
+/* Verifica sobreposição para um navio horizontal */
+bool overlapHorizontal(int board[BOARD_SIZE][BOARD_SIZE], int row, int col) {
+    for (int i = 0; i < SHIP_SIZE; i++) {
+        if (board[row][col + i] != 0) return true;
+    }
+    return false;
+}
+
+/* Verifica sobreposição para um navio vertical */
+bool overlapVertical(int board[BOARD_SIZE][BOARD_SIZE], int row, int col) {
+    for (int i = 0; i < SHIP_SIZE; i++) {
+        if (board[row + i][col] != 0) return true;
+    }
+    return false;
+}
+
+/* Coloca um navio horizontal no tabuleiro (marca com 3) */
+void placeHorizontal(int board[BOARD_SIZE][BOARD_SIZE], int row, int col) {
+    for (int i = 0; i < SHIP_SIZE; i++)
+        board[row][col + i] = 3;
+}
+
+/* Coloca um navio vertical no tabuleiro (marca com 3) */
+void placeVertical(int board[BOARD_SIZE][BOARD_SIZE], int row, int col) {
+    for (int i = 0; i < SHIP_SIZE; i++)
+        board[row + i][col] = 3;
+}
+
+int main() {
+    int board[BOARD_SIZE][BOARD_SIZE];
+
+    /* Inicializa o tabuleiro (todas posições = 0) */
+    initBoard(board);
+
+    /* 
+       Defina as coordenadas iniciais aqui (0-based):
+       - linha e coluna onde começa o navio (parte "mais à esquerda" para horizontal,
+         e "mais acima" para vertical).
+       Exemplos:
+         horizontal_start_row = 2;
+         horizontal_start_col = 4;
+         vertical_start_row = 5;
+         vertical_start_col = 7;
+    */
+    int horizontal_start_row = 2;
+    int horizontal_start_col = 4;
+
+    int vertical_start_row = 5;
+    int vertical_start_col = 7;
+
+    /* Validação: cabe no tabuleiro? */
+    if (!fitsHorizontal(horizontal_start_row, horizontal_start_col)) {
+        printf("Erro: navio horizontal não cabe nas coordenadas (%d, %d).\n",
+               horizontal_start_row, horizontal_start_col);
+        return 1;
+    }
+    if (!fitsVertical(vertical_start_row, vertical_start_col)) {
+        printf("Erro: navio vertical não cabe nas coordenadas (%d, %d).\n",
+               vertical_start_row, vertical_start_col);
+        return 1;
+    }
+
+    /* Verifica sobreposição entre os dois navios */
+    bool overlap = false;
+
+    /* Primeiro cheque sobreposição destas posições cruzadas (simplificação): */
+    /* Checamos se qualquer célula que o navio horizontal ocupar já está ocupada,
+       e idem para o vertical. Como o tabuleiro está inicialmente vazio, é suficiente
+       checar antes de colocar cada navio. */
+
+    if (overlapHorizontal(board, horizontal_start_row, horizontal_start_col)) {
+        printf("Erro: sobreposição detectada ao tentar posicionar navio horizontal.\n");
+        return 1;
+    }
+    /* Coloca navio horizontal temporariamente */
+    placeHorizontal(board, horizontal_start_row, horizontal_start_col);
+
+    /* Agora verifique se o navio vertical colide com o que acabamos de colocar */
+    if (overlapVertical(board, vertical_start_row, vertical_start_col)) {
+        overlap = true;
+    }
+
+    if (overlap) {
+        printf("Erro: navios iriam se sobrepor (posicione em outras coordenadas).\n");
+        return 1;
+    }
+
+    /* Se não houve sobreposição, colocamos o navio vertical (já que o horizontal foi colocado) */
+    placeVertical(board, vertical_start_row, vertical_start_col);
+
+    /* Exibe o tabuleiro final */
+    printf("Tabuleiro com navios posicionados (0 = água, 3 = navio):\n\n");
+    printBoard(board);
+
+    return 0;
+}
